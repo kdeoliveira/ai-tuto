@@ -6,12 +6,14 @@ import random
 PIPE_IMG = pygame.transform.scale2x(
     pygame.image.load(os.path.join("assets", "pipe.png")))
 
+INIT_X = 650
 
-class Pipe():
+class Pipe:
     GAP = 200
     VEL = 5
 
-    def __init__(slef, x):
+    def __init__(self, x):
+        # x = Initial value Pipe is drawn
         self.x = x
         self.heigth = 0
 
@@ -23,8 +25,8 @@ class Pipe():
         self.passed = False
         self.set_height()
 
-    def set_height(slef):
-        slef.heigth = random.randrange(50, 450)
+    def set_height(self):
+        self.heigth = random.randrange(50, 450)
         self.top = self.heigth - self.PIPE_TOP.get_height()
         self.bottom = self.heigth + self.GAP
     
@@ -36,7 +38,7 @@ class Pipe():
         win.blit(self.PIPE_BOTTOM, (self.x, self.bottom))
 
     def collide(self, bird):
-        bird_mask = bird.get_mask
+        bird_mask = bird.get_mask()
         top_mask = pygame.mask.from_surface(self.PIPE_TOP)
         bottom_mask = pygame.mask.from_surface(self.PIPE_BOTTOM)
 
@@ -58,7 +60,7 @@ class Base:
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
-    def __init__(self, x, y):
+    def __init__(self, y):
         self.y = y
         self.x1 = 0
         self.x2 = self.WIDTH
@@ -67,9 +69,12 @@ class Base:
         self.x1 -= self.VEL
         self.x2 -= self.VEL
 
+        #Horizontal scrolling effect
         if self.x1 + self.WIDTH < 0:
             self.x1 = self.x2 + self.WIDTH
-
-
         if self.x2 + self.WIDTH < 0:
             self.x2 = self.x1 + self.WIDTH
+
+    def draw(self, win):
+        win.blit(self.IMG, (self.x1, self.y))
+        win.blit(self.IMG, (self.x2, self.y))
